@@ -3,7 +3,7 @@ import math
 # Создаём экран и задаём цвет фона
 screen = turtle.Screen()
 turtle.colormode(255)
-screen.bgcolor(149,24,18)
+screen.bgcolor(149,24,17)
 
 
 #Это вам не нужно, это мой фикс на типизации данных
