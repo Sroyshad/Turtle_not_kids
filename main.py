@@ -8,14 +8,12 @@ screen.bgcolor(149,24,17)
 
 #Это вам не нужно, это мой фикс на типизации данных
 def configure():
-    """Запрашивает настройки у пользователя."""
     print("Базовый терминал рисования\n"
           "Выбор параметров для редактирования:\n"
           " 1. Толщина линии\n"
           " 2. Цвет\n"
           " 3. Скорость")
 
-    # Гарантируем длину 3 — нет IndexError
     choices = input("Введите 3 символа (1/0): ").ljust(3, "0")
 
     fat   = int(input("Толщина: ")) if choices[0] == "1" else 2
@@ -26,11 +24,10 @@ def configure():
     return fat, color, speed
 
 def draw_circle(pen):
-    """Рисует круг одним вызовом."""
     for _ in range(200):
         pen.right(1)
         pen.forward(1)
-# Создаём «черепашку»
+
 def main():
     screen = turtle.Screen()
     turtle.colormode(255)
@@ -40,7 +37,7 @@ def main():
 
     pen = turtle.Turtle()
     pen.pensize(fat)
-    pen.pencolor(*color)      # распаковка: pencolor(r, g, b)
+    pen.pencolor(*color)
     pen.speed(speed)
 
     pen.begin_fill()
@@ -54,7 +51,7 @@ def main():
     pen.hideturtle()
     screen.mainloop()
 
-    screen.update()           # отрисовать всё разом
+    screen.update()
     screen.exitonclick()
 
 
