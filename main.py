@@ -1,9 +1,5 @@
 import turtle
-import math
-# Создаём экран и задаём цвет фона
-screen = turtle.Screen()
-turtle.colormode(255)
-screen.bgcolor(149,24,17)
+
 
 
 #Это вам не нужно, это мой фикс на типизации данных
@@ -11,17 +7,23 @@ def configure():
     print("Базовый терминал рисования\n"
           "Выбор параметров для редактирования:\n"
           " 1. Толщина линии\n"
-          " 2. Цвет\n"
-          " 3. Скорость")
+          " 2. Цвет обводки\n"
+          " 3. Скорость\n"
+          " 4. Цвет фона\n"
+          " 5. Цвет заливки сердца\n")
 
-    choices = input("Введите 3 символа (1/0): ").ljust(3, "0")
+    choices = input("Введите 5 символа (1/0): ").ljust(5, "0")
 
     fat   = int(input("Толщина: ")) if choices[0] == "1" else 2
-    color = (list(map(int, input("Цвет RGB через пробел: ").split()))
+    color = (list(map(int, input("Цвет ко   нтура RGB через пробел: ").split()))
              if choices[1] == "1" else [239, 191, 4])
-    speed = int(input("Скорость: ")) if choices[2] == "1" else 2
+    speed = int(input("Скорость: ")) if choices[2] == "1" else 1
+    collorScreen = (list(map(int, input("Цвет фона RGB через пробел: ").split()))
+             if choices[3] == "1" else [166, 22, 22])
+    collorBack = (list(map(int, input("Цвет заливки RGB через пробел: ").split()))
+                    if choices[4] == "1" else [239, 191, 4])
 
-    return fat, color, speed
+    return fat, color, speed, collorScreen, collorBack
 
 def draw_circle(pen):
     for _ in range(200):
@@ -29,15 +31,16 @@ def draw_circle(pen):
         pen.forward(1)
 
 def main():
+    fat, color, speed, collorScrean, collorBack = configure()
     screen = turtle.Screen()
     turtle.colormode(255)
-    screen.bgcolor(149, 24, 18)
+    screen.bgcolor(*collorScrean)
 
-    fat, color, speed = configure()
 
     pen = turtle.Turtle()
     pen.pensize(fat)
     pen.pencolor(*color)
+    pen.fillcolor(*collorBack)
     pen.speed(speed)
 
     pen.begin_fill()
