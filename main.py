@@ -1,25 +1,8 @@
 import turtle
-from typing import Annotated
 
-from pydantic import BaseModel, Field, field_validator
+POINT = 5  # Количество пунктов
 
-point = 5  # Количество пунктов
-
-# class Validation(BaseModel):
-#     fat: Annotated[int, Field(ge=0, le=100)]
-#     speed: Annotated[int, Field(ge=0, le=9)]
-#     colorScreen: tuple[int, int, int]
-#     colorBack: tuple[int,int,int]
-#
-#     @field_validator('colorScreen', 'colorBack')
-#     @classmethod
-#     def RGB(cls, v):
-#         if not all(0 <= i <= 255 for i in v):
-#             raise ValueError("Формат RGB до 255")
-#         return v
-
-
-def choicesDef():
+def choicedef() -> str:
     print("Базовый терминал рисования\n"
           "Выбор параметров для редактирования:\n"
           " 1. Толщина линии\n"
@@ -28,67 +11,63 @@ def choicesDef():
           " 4. Цвет фона\n"
           " 5. Цвет заливки сердца\n")
     while True:
-        x = 0
-        choice = input(f"Введите {point} символа (1/0): ").strip()
-        choice = choice[:point].ljust(point, "0")
-
-        for i in choice:
-            if str(i) not in ("0", "1"):
-                print("В ответе должны содержаться только цифры: \"0\" и \"1\"\n")
-
-                break
-            else:
-                x+=1
-
-        if x == point:
+        choice = input(f"Введите {POINT} символов, формата чисел:(1/0): ").strip()
+        choice = choice[:POINT].ljust(POINT, "0")
+        if all(i in ("0", "1") for i in choice):
             break
     return choice
+def speed_turtle() -> int:
+    while True:
+        speed = input("Скорость (1 — медленно, 10 — быстро): ")
+        if speed.isdigit():
+            if -1 < int(speed) < 11:
+                return int(speed)
+            else:
+                print("Нужно целое от 1 до 10")
+        else:
+            print("Нужно целое от 1 до 10")
 
-def configure():
-    if Isexamination():
-        fat = int(input("Толщина: "))
-    color = (list(map(int, input("Цвет контура RGB через пробел: ").split()))
-             if choices[1] == "1" else [239, 191, 4])
-    speed = int(input("Скорость: ")) if choices[2] == "1" else 1
-    colorScreen = (list(map(int, input("Цвет фона RGB через пробел: ").split()))
-             if choices[3] == "1" else [166, 22, 22])
-    colorBack = (list(map(int, input("Цвет заливки RGB через пробел: ").split()))
-                    if choices[4] == "1" else [239, 191, 4])
 
-    return Validation(fat=fat, color=color, speed=speed, colorScreen=colorScreen, colorBack=colorBack)
 
-def draw_circle(pen):
-    for _ in range(200):
-        pen.right(1)
-        pen.forward(1)
+def configure() -> tuple:
+    choices = choicedef()
+    fat = int(input("Толщина: ")) if choices[0] == "1" else 2
+    color = (list(map(int, input("Цвет контура RGB через пробел(пример:255 255 255): ").split()))
+             if choices[1] == "1" else [200, 191, 4])
+    speed = speed_turtle() if choices[2] == "1" else 1
+    color_screen = (list(map(int, input("Цвет фона RGB через пробел(пример:255 255 255): ").split()))
+                    if choices[3] == "1" else [166, 22, 22])
+    color_back = (list(map(int, input("Цвет заливки RGB через пробел(пример:255 255 255): ").split()))
+                  if choices[4] == "1" else [239, 191, 4])
 
-def main():
-    fat, color, speed, colorScreen, colorBack = configure()
+    return fat, color, speed, color_back, color_screen
+
+
+
+def main() -> None:
+    fat, color, speed, color_back, color_screen = configure()
     screen = turtle.Screen()
     turtle.colormode(255)
-    screen.bgcolor(*colorScreen)
+    screen.bgcolor(*color_screen)
 
 
     pen = turtle.Turtle()
     pen.pensize(fat)
     pen.pencolor(*color)
-    pen.fillcolor(*colorBack)
+    pen.fillcolor(*color_back)
     pen.speed(speed)
 
     pen.begin_fill()
     pen.left(140)
     pen.forward(113)
-    draw_circle(pen)
+    pen.circle(-57.3, 200)
     pen.left(120)
-    draw_circle(pen)
+    pen.circle(-57.3, 200)
     pen.forward(113)
     pen.end_fill()
     pen.hideturtle()
 
-    screen.update()
     screen.exitonclick()
-    screen.mainloop()
-
 
 if __name__ == "__main__":
     main()
