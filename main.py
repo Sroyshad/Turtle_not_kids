@@ -27,18 +27,24 @@ def speed_turtle() -> int:
         else:
             print("Нужно целое от 1 до 10")
 
+def examination_rgb() -> list[int, int, int]:
+    while True:
+        color_screen = (list(map(int, input("Цвет фона RGB через пробел(пример:255 255 255): ").split())))
+        if color_screen != " ":
+        if all(0 <= i <= 255 for i in color_screen):
+            if len(color_screen) == 3:
+                return
+
+
 
 
 def configure() -> tuple:
     choices = choicedef()
     fat = int(input("Толщина: ")) if choices[0] == "1" else 2
-    color = (list(map(int, input("Цвет контура RGB через пробел(пример:255 255 255): ").split()))
-             if choices[1] == "1" else [200, 191, 4])
+    color = examination_rgb() if choices[1] == "1" else [200, 191, 4]
     speed = speed_turtle() if choices[2] == "1" else 1
-    color_screen = (list(map(int, input("Цвет фона RGB через пробел(пример:255 255 255): ").split()))
-                    if choices[3] == "1" else [166, 22, 22])
-    color_back = (list(map(int, input("Цвет заливки RGB через пробел(пример:255 255 255): ").split()))
-                  if choices[4] == "1" else [239, 191, 4])
+    color_screen = examination_rgb() if choices[3] == "1" else [166, 22, 22]
+    color_back = examination_rgb() if choices[4] == "1" else [239, 191, 4]
 
     return fat, color, speed, color_back, color_screen
 
